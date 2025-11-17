@@ -18,7 +18,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <View style={styles.summary}>
         <Text style={styles.summaryLabel}>Today’s spend</Text>
-        <Text style={styles.summaryValue}>${todayTotal.toFixed(2)}</Text>
+        <Text style={styles.summaryValue}>₹{todayTotal.toFixed(2)}</Text>
         <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Add' as never)}>
           <Text style={styles.addText}>Add expense</Text>
         </TouchableOpacity>
@@ -37,7 +37,7 @@ const HomeScreen = () => {
               <Text style={styles.expenseSubtitle}>{dayjs(item.date).format('h:mm A')}</Text>
             </View>
             <View style={styles.expenseAmount}>
-              <Text style={styles.expenseValue}>${item.amount.toFixed(2)}</Text>
+              <Text style={styles.expenseValue}>₹{item.amount.toFixed(2)}</Text>
               <Text style={styles.expenseMood}>{item.moodEmoji}</Text>
             </View>
           </View>
