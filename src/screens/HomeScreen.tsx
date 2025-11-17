@@ -25,7 +25,7 @@ const HomeScreen = () => {
     <SafeAreaView style={dynamicStyles.container} edges={['top', 'left', 'right']}>
       <View style={dynamicStyles.header}>
         <Text style={dynamicStyles.heading}>FinFriend</Text>
-        <Logo width={32} height={32} fill={logoColor} />
+        <Logo width={44} height={44} fill={logoColor} />
       </View>
       <View style={dynamicStyles.summary}>
         <Text style={dynamicStyles.summaryLabel}>Today's spend</Text>
