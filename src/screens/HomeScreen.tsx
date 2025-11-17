@@ -7,21 +7,26 @@ import { useExpenseStore } from '../store/useExpenseStore';
 import { spacing, lightColors } from '../theme';
 import { useTheme } from '../hooks/useTheme';
 import type { TabParamList } from '../navigation/AppNavigator';
+import Logo from '../../assets/logo.svg';
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<TabParamList>>();
   const expenses = useExpenseStore((state) => state.expenses);
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
 
   const todayKey = dayjs().format('YYYY-MM-DD');
   const todaysExpenses = expenses.filter((expense) => dayjs(expense.date).format('YYYY-MM-DD') === todayKey);
   const todayTotal = todaysExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
   const dynamicStyles = makeStyles(colors);
+  const logoColor = mode === 'dark' ? '#ffffff' : '#000000';
 
   return (
     <SafeAreaView style={dynamicStyles.container} edges={['top', 'left', 'right']}>
-      <Text style={dynamicStyles.heading}>FinFriend</Text>
+      <View style={dynamicStyles.header}>
+        <Text style={dynamicStyles.heading}>FinFriend</Text>
+        <Logo width={32} height={32} fill={logoColor} />
+      </View>
       <View style={dynamicStyles.summary}>
         <Text style={dynamicStyles.summaryLabel}>Today's spend</Text>
         <Text style={dynamicStyles.summaryValue}>₹{todayTotal.toFixed(2)}</Text>
@@ -61,6 +66,12 @@ const makeStyles = (colors: typeof lightColors) =>
       padding: spacing.lg,
       backgroundColor: colors.background,
       gap: spacing.md,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: spacing.sm,
     },
     summary: {
       backgroundColor: colors.card,
