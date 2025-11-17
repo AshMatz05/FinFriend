@@ -66,7 +66,7 @@ const ExpenseHistoryScreen = () => {
               <Text style={dynamicStyles.rowSubtitle}>{dayjs(item.date).format('MMM D, YYYY')}</Text>
             </View>
             <View style={dynamicStyles.rowAmount}>
-              <Text style={dynamicStyles.rowValue}>${item.amount.toFixed(2)}</Text>
+              <Text style={dynamicStyles.rowValue}>₹{item.amount.toFixed(2)}</Text>
               <Text style={dynamicStyles.rowMood}>{item.moodEmoji}</Text>
             </View>
           </View>
