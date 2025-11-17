@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, LayoutChangeEvent } from 'react-native';
 import Svg, { Text as SvgText } from 'react-native-svg';
-import { colors, spacing } from '../theme';
+import { spacing, lightColors } from '../theme';
+import { useTheme } from '../hooks/useTheme';
 import { MoodType } from '../store/types';
 
 export interface CloudDatum {
@@ -25,14 +26,15 @@ const POSITIVE_COLORS = ['#22c55e', '#16a34a', '#15803d', '#166534', '#14532d', 
 const NEGATIVE_COLORS = ['#ef4444', '#dc2626', '#b91c1c', '#991b1b', '#f97316', '#ea580c', '#c2410c', '#9a3412'];
 const NEUTRAL_COLORS = ['#6b7280', '#4b5563', '#374151', '#1f2937', '#9ca3af', '#6b7280', '#4b5563', '#374151'];
 
-const getMoodColor = (mood: MoodType | undefined, index: number): string => {
-  if (!mood) return colors.accent;
+const getMoodColor = (mood: MoodType | undefined, index: number, accentColor: string): string => {
+  if (!mood) return accentColor;
   
   const palette = mood === 'positive' ? POSITIVE_COLORS : mood === 'negative' ? NEGATIVE_COLORS : NEUTRAL_COLORS;
   return palette[index % palette.length];
 };
 
 const WordCloud = ({ title, data }: WordCloudProps) => {
+  const { colors } = useTheme();
   const [containerWidth, setContainerWidth] = useState(0);
   const maxValue = data.reduce((max, item) => Math.max(max, item.value), 0) || 1;
   const width = containerWidth || 320;
@@ -96,11 +98,13 @@ const WordCloud = ({ title, data }: WordCloudProps) => {
     }
   };
 
+  const dynamicStyles = makeStyles(colors);
+
   return (
-    <View style={styles.card} onLayout={handleLayout}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={dynamicStyles.card} onLayout={handleLayout}>
+      <Text style={dynamicStyles.title}>{title}</Text>
       {data.length === 0 ? (
-        <Text style={styles.empty}>No data yet.</Text>
+        <Text style={dynamicStyles.empty}>No data yet.</Text>
       ) : (
         <Svg height={placedWords.height} width={width}>
           {placedWords.nodes.map((node, idx) => (
@@ -109,7 +113,7 @@ const WordCloud = ({ title, data }: WordCloudProps) => {
               x={node.x}
               y={node.y}
               fontSize={node.fontSize}
-              fill={getMoodColor(node.mood, idx)}
+              fill={getMoodColor(node.mood, idx, colors.accent)}
               textAnchor="middle"
               alignmentBaseline="middle"
               transform={node.rotate ? `rotate(${node.rotate} ${node.x} ${node.y})` : undefined}
@@ -123,22 +127,23 @@ const WordCloud = ({ title, data }: WordCloudProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.card,
-    padding: spacing.md,
-    borderRadius: 20,
-    marginBottom: spacing.md,
-  },
-  title: {
-    fontWeight: '700',
-    marginBottom: spacing.sm,
-    color: colors.text,
-  },
-  empty: {
-    color: colors.muted,
-  },
-});
+const makeStyles = (colors: typeof lightColors) =>
+  StyleSheet.create({
+    card: {
+      backgroundColor: colors.card,
+      padding: spacing.md,
+      borderRadius: 20,
+      marginBottom: spacing.md,
+    },
+    title: {
+      fontWeight: '700',
+      marginBottom: spacing.sm,
+      color: colors.text,
+    },
+    empty: {
+      color: colors.muted,
+    },
+  });
 
 export default WordCloud;
 

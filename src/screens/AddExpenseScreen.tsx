@@ -1,37 +1,45 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ExpenseForm from '../components/ExpenseForm';
-import { colors, spacing } from '../theme';
+import { spacing, lightColors } from '../theme';
+import { useTheme } from '../hooks/useTheme';
 
-const AddExpenseScreen = () => (
-  <SafeAreaView style={styles.container}>
-    <ScrollView contentContainerStyle={styles.content}>
-      <Text style={styles.heading}>Log an expense</Text>
-      <Text style={styles.subheading}>Track how spending makes you feel.</Text>
-      <ExpenseForm />
-    </ScrollView>
-  </SafeAreaView>
-);
+const AddExpenseScreen = () => {
+  const { colors } = useTheme();
+  const dynamicStyles = makeStyles(colors);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    padding: spacing.lg,
-    gap: spacing.sm,
-  },
-  heading: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  subheading: {
-    color: colors.muted,
-    marginBottom: spacing.md,
-  },
-});
+  return (
+    <SafeAreaView style={dynamicStyles.container} edges={['top', 'left', 'right']}>
+      <ScrollView contentContainerStyle={dynamicStyles.content}>
+        <Text style={dynamicStyles.heading}>Log an expense</Text>
+        <Text style={dynamicStyles.subheading}>Track how spending makes you feel.</Text>
+        <ExpenseForm />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const makeStyles = (colors: typeof lightColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    content: {
+      padding: spacing.lg,
+      gap: spacing.sm,
+    },
+    heading: {
+      fontSize: 28,
+      fontWeight: '700',
+      color: colors.text,
+    },
+    subheading: {
+      color: colors.muted,
+      marginBottom: spacing.md,
+    },
+  });
 
 export default AddExpenseScreen;
 
