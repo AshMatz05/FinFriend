@@ -57,34 +57,34 @@ const WordCloud = ({ title, data }: WordCloudProps) => {
     data
       .slice()
       .sort((a, b) => b.value - a.value)
-      .forEach((item, index) => {
+      .forEach((item) => {
         const weight = item.value / maxValue;
         const fontSize = MIN_FONT + weight * (MAX_FONT - MIN_FONT);
-        const isVertical = index % 4 === 0;
+        // Always horizontal: estimate width based on characters and font size
         const textLength = Math.max(item.text.length, 2);
-        const approxWidth = isVertical ? fontSize * 0.9 : fontSize * textLength * 0.55;
-        const approxHeight = isVertical ? fontSize * textLength * 0.6 : fontSize * 1.1;
+        const approxWidth = fontSize * textLength * 0.55;
+  const approxHeight = fontSize * 1.1;
 
-        if (cursorX + approxWidth > width - PADDING) {
-          cursorX = PADDING;
-          cursorY += rowHeight + GAP;
-          rowHeight = 0;
-        }
+  if (cursorX + approxWidth > width - PADDING) {
+    cursorX = PADDING;
+    cursorY += rowHeight + GAP;
+    rowHeight = 0;
+  }
 
-        const xCenter = cursorX + approxWidth / 2;
-        const yBaseline = cursorY + approxHeight / 2;
+  const xCenter = cursorX + approxWidth / 2;
+  const yBaseline = cursorY + approxHeight / 2;
 
-        nodes.push({
-          x: xCenter,
-          y: yBaseline,
-          rotate: isVertical ? -90 : 0,
-          fontSize,
-          text: item.text,
-          mood: item.mood,
-        });
+  nodes.push({
+    x: xCenter,
+    y: yBaseline,
+    rotate: 0,
+    fontSize,
+    text: item.text,
+    mood: item.mood,
+  });
 
-        cursorX += approxWidth + GAP;
-        rowHeight = Math.max(rowHeight, approxHeight);
+  cursorX += approxWidth + GAP;
+  rowHeight = Math.max(rowHeight, approxHeight);
       });
 
     const height = cursorY + rowHeight + PADDING;
