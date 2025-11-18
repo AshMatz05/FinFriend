@@ -30,6 +30,8 @@ interface ExpenseState {
   moodStats: Record<string, MoodStat>;
   categoryEmojiStats: Record<string, CategoryEmojiStat>;
   addExpense: (payload: AddExpensePayload) => Expense;
+  updateExpense: (id: string, payload: AddExpensePayload) => Expense | null;
+  deleteExpense: (id: string) => void;
   getPredictedMood: (category: string) => MoodType;
   shouldWarn: (category: string) => boolean;
   getCategoryEmoji: (category: string, description?: string) => string;
@@ -65,6 +67,45 @@ export const useExpenseStore = create<ExpenseState>()(
         });
 
         return expense;
+      },
+      updateExpense: (id, { mood, ...payload }) => {
+        const state = get();
+        const existing = state.expenses.find((exp) => exp.id === id);
+        if (!existing) return null;
+
+        const normalizedCategory = payload.category.trim();
+        const resolvedMood = mood ?? existing.mood;
+        const updated: Expense = {
+          ...existing,
+          amount: payload.amount,
+          category: normalizedCategory,
+          description: payload.description?.trim(),
+          date: payload.date,
+          mood: resolvedMood,
+          moodEmoji: moodEmojiMap[resolvedMood],
+          categoryEmoji: getCategoryEmoji(normalizedCategory, payload.description),
+        };
+
+        set((prevState) => {
+          const expenses = prevState.expenses.map((exp) => (exp.id === id ? updated : exp));
+          return {
+            expenses,
+            moodStats: buildMoodStats(expenses),
+            categoryEmojiStats: buildCategoryEmojiStats(expenses),
+          };
+        });
+
+        return updated;
+      },
+      deleteExpense: (id) => {
+        set((state) => {
+          const expenses = state.expenses.filter((exp) => exp.id !== id);
+          return {
+            expenses,
+            moodStats: buildMoodStats(expenses),
+            categoryEmojiStats: buildCategoryEmojiStats(expenses),
+          };
+        });
       },
       getPredictedMood: (category) => predictMoodFromStats(category, get().moodStats),
       shouldWarn: (category) => shouldWarnFromStats(category, get().moodStats),
