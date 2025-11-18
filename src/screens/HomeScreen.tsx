@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
@@ -7,7 +7,6 @@ import { useExpenseStore } from '../store/useExpenseStore';
 import { spacing, lightColors } from '../theme';
 import { useTheme } from '../hooks/useTheme';
 import type { TabParamList } from '../navigation/AppNavigator';
-import Logo from '../../assets/logo.svg';
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<TabParamList>>();
@@ -19,13 +18,16 @@ const HomeScreen = () => {
   const todayTotal = todaysExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
   const dynamicStyles = makeStyles(colors);
-  const logoColor = mode === 'dark' ? '#ffffff' : '#000000';
+  const logoSource =
+    mode === 'dark'
+      ? require('../../assets/logo_darkmode.png')
+      : require('../../assets/logo.png');
 
   return (
     <SafeAreaView style={dynamicStyles.container} edges={['top', 'left', 'right']}>
       <View style={dynamicStyles.header}>
         <Text style={dynamicStyles.heading}>FinFriend</Text>
-        <Logo width={44} height={44} fill={logoColor} />
+        <Image source={logoSource} style={dynamicStyles.logo} resizeMode="contain" />
       </View>
       <View style={dynamicStyles.summary}>
         <Text style={dynamicStyles.summaryLabel}>Today's spend</Text>
@@ -72,6 +74,10 @@ const makeStyles = (colors: typeof lightColors) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: spacing.sm,
+    },
+    logo: {
+      width: 48,
+      height: 48,
     },
     summary: {
       backgroundColor: colors.card,
