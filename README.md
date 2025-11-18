@@ -31,6 +31,8 @@ Use Expo Go or an emulator/simulator to preview the application.
 Install (already included in `package.json`):
 ```bash
 npx expo install @react-navigation/native @react-navigation/native-stack @react-navigation/bottom-tabs react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-async-storage/async-storage react-native-svg react-native-svg-transformer
+```
+```bash
 npm install zustand react-native-toast-message dayjs nanoid react-native-modal-datetime-picker
 ```
 
