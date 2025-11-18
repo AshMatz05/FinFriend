@@ -11,7 +11,7 @@ import type { TabParamList } from '../navigation/AppNavigator';
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<TabParamList>>();
   const expenses = useExpenseStore((state) => state.expenses);
-  const { colors, mode } = useTheme();
+  const { colors, mode, toggleTheme } = useTheme();
 
   const todayKey = dayjs().format('YYYY-MM-DD');
   const todaysExpenses = expenses.filter((expense) => dayjs(expense.date).format('YYYY-MM-DD') === todayKey);
@@ -27,7 +27,10 @@ const HomeScreen = () => {
     <SafeAreaView style={dynamicStyles.container} edges={['top', 'left', 'right']}>
       <View style={dynamicStyles.header}>
         <Text style={dynamicStyles.heading}>FinFriend</Text>
-        <Image source={logoSource} style={dynamicStyles.logo} resizeMode="contain" />
+        {/* <Image source={logoSource} style={dynamicStyles.logo} resizeMode="contain" /> */}
+        <TouchableOpacity onPress={toggleTheme}>
+          <Image source={logoSource} style={dynamicStyles.logo} resizeMode="contain" />
+        </TouchableOpacity>
       </View>
       <View style={dynamicStyles.summary}>
         <Text style={dynamicStyles.summaryLabel}>Today's spend</Text>

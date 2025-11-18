@@ -13,7 +13,7 @@ const ExpenseHistoryScreen = () => {
   const expenses = useExpenseStore((state) => state.expenses);
   const updateExpense = useExpenseStore((state) => state.updateExpense);
   const deleteExpense = useExpenseStore((state) => state.deleteExpense);
-  const { colors } = useTheme();
+  const { colors, mode, toggleTheme } = useTheme();
   const [query, setQuery] = useState('');
   const [moodFilter, setMoodFilter] = useState('');
   const [emojiFilter, setEmojiFilter] = useState('');
@@ -36,7 +36,12 @@ const ExpenseHistoryScreen = () => {
 
   return (
     <SafeAreaView style={dynamicStyles.container} edges={['top', 'left', 'right']}>
+            <View style={dynamicStyles.header}>
+
       <Text style={dynamicStyles.heading}>Expense history</Text>
+      <TouchableOpacity onPress={toggleTheme} style={dynamicStyles.themeToggle}>
+          <Ionicons name={mode === 'dark' ? 'sunny' : 'moon'} size={24} color={colors.text} />
+        </TouchableOpacity></View>
       <TextInput
         style={dynamicStyles.input}
         placeholder="Search category or description"
@@ -133,6 +138,9 @@ const makeStyles = (colors: typeof lightColors) =>
       marginBottom: spacing.md,
       color: colors.text,
     },
+    themeToggle: {
+      padding: spacing.sm,
+    },
     input: {
       borderWidth: 1,
       borderColor: colors.border,
@@ -161,6 +169,12 @@ const makeStyles = (colors: typeof lightColors) =>
     rowSubtitle: {
       color: colors.muted,
       marginTop: 2,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: spacing.md,
     },
     rowAmount: {
       alignItems: 'flex-end',
