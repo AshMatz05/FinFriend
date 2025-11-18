@@ -9,6 +9,7 @@ FinFriend is a React Native application that aims to ease expense tracking by us
 - **Negative history warnings** alert when over 60% of a category’s moods are negative.
 - **Insights dashboard** with three word clouds (categories, moods, category emojis) plus “categories you enjoy/regret” stats.
 - **Expense history** includes search plus mood and emoji filters for quick lookups.
+- **Dark/Light mode** the logo on the home page, and the icon on other pages act as dark and light mode toggles.
 
 ## Tech Stack
 - Expo + React Native + TypeScript
