@@ -9,6 +9,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
 import { Expense, MoodType } from '../store/types';
@@ -86,7 +87,7 @@ const EditExpenseModal = ({ visible, expense, onClose, onSave }: EditExpenseModa
   return (
     <Modal visible={visible} animationType="slide" transparent statusBarTranslucent>
       <View style={dynamicStyles.overlay}>
-        <View style={dynamicStyles.sheet}>
+        <SafeAreaView style={dynamicStyles.sheet} edges={['bottom']}>
           <Text style={dynamicStyles.title}>{modalTitle}</Text>
           <Text style={dynamicStyles.label}>Amount (₹)</Text>
           <TextInput
@@ -132,7 +133,7 @@ const EditExpenseModal = ({ visible, expense, onClose, onSave }: EditExpenseModa
               <Text style={[dynamicStyles.buttonText, dynamicStyles.saveText]}>Save</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </SafeAreaView>
       </View>
 
       <DateTimePickerModal
